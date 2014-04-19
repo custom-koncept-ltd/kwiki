@@ -14,20 +14,14 @@ import koncept.kwiki.mojo.AbstractKwikiMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.spi.HttpServerProvider;
 
 @Mojo(name="run", aggregator=true)
 public class RunMojo extends AbstractKwikiMojo {
-/*
- add to settings.xml:
- 
-  <pluginGroups>
-    <pluginGroup>koncept.kwiki</pluginGroup>
-  </pluginGroups
- */
-	
+
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		try {
 			HttpServerProvider provider = HttpServerProvider.provider();
@@ -45,14 +39,6 @@ public class RunMojo extends AbstractKwikiMojo {
 		} catch (Exception e) {
 			throw new MojoExecutionException("Unable to start KWiki", e);
 		}
-	}
-	
-	public int getPort() {
-		String value = System.getProperty("kwikiport");
-		if (value != null && !value.equals("")) {
-			return new Integer(value);
-		}
-		return 8080; //because you won't have anything else on this port...  :/
 	}
 	
 }

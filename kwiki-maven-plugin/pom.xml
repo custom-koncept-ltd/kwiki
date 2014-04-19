@@ -100,5 +100,6 @@
 	<properties>
 		<maven.project.api.version>2.2.1</maven.project.api.version>
 	</properties>
+	<name>Kwiki Maven Plugin</name>
 </project>
 

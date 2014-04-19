@@ -18,16 +18,18 @@ import koncept.kwiki.core.resource.file.SimpleFileSystemResourceLocator;
 import koncept.kwiki.mojo.AbstractKwikiMojo;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.artifact.AttachedArtifact;
 
 @Mojo(name="docs")
 public class DocsMojo extends AbstractKwikiMojo {
 	
-	@Parameter(defaultValue="kwiki")
-	public String artifactSuffix;
+	@Parameter(defaultValue="userdocs")
+	public String classifier;
 	
 	private KWiki kwiki;
 	
@@ -43,15 +45,14 @@ public class DocsMojo extends AbstractKwikiMojo {
 		
 		String outputJarName = getMavenProject().getArtifactId() +
 				"-" + getMavenProject().getVersion() +
-				"-" + artifactSuffix +
+				"-" + classifier +
 				".jar";
-		
+		File outputJarFile = new File(new File(getTargetDir()), outputJarName);
 		
 		ZipOutputStream out = null;
 		try {
-			File zipFile = new File(new File(getTargetDir()), outputJarName);
-			zipFile.getParentFile().mkdirs();
-			out = new ZipOutputStream(new FileOutputStream(zipFile));
+			outputJarFile.getParentFile().mkdirs();
+			out = new ZipOutputStream(new FileOutputStream(outputJarFile));
 
 			//write out a manifest
 			out.putNextEntry(new ZipEntry("META-INF/MANIFEST.MF"));
@@ -76,40 +77,12 @@ public class DocsMojo extends AbstractKwikiMojo {
 					throw new MojoFailureException("Error closing jar file", e);
 				}
 		}
-		
-		
-		
-		
-//		getLog().info("MavenSession == " + session);
-		
-		
-//		 >> runnable jar? or preprocess all the html? ... RJ, because of binary artifacts?
-//		getDocsDir()
-//		getTargetDir()
-		
-//		String groupId, String artifactId, String version, String scope, String type,
-//        String classifier, ArtifactHandler artifactHandle
-		
-//		DefaultArtifact kwikiDocsArtifact = new DefaultArtifact(
-//				getMavenProject().getGroupId(), 
-//				getMavenProject().getArtifactId(),
-//				null, //versionRange,
-//				null, //scope, 
-//				"jar", 
-//				null, //classifier, 
-//				new DocsArtifactHandler());
-//		
-//		
-//		
-////		kwikiDocsArtifact.setFile(file);
-//		
-//		MavenArchiver archiver = new MavenArchiver();
-//		MavenArchiveConfiguration archiveConfiguration = new MavenArchiveConfiguration();
-////		archiver.createArchive(session, getMavenProject(), archiveConfiguration);
-//		
-//		
-//		getMavenProject().addAttachedArtifact(kwikiDocsArtifact);
-		
+
+//		attatch it
+		AttachedArtifact artifact = new AttachedArtifact(getMavenProject().getArtifact(), "jar", classifier, new DefaultArtifactHandler("jar"));
+		artifact.setResolved(true);
+		artifact.setFile(outputJarFile);
+		getMavenProject().addAttachedArtifact(artifact);
 	}
 	
 	private KWiki getKwiki() throws MojoFailureException {

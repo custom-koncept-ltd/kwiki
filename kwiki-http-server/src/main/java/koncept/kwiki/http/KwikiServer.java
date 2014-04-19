@@ -29,6 +29,16 @@ public class KwikiServer implements HttpHandler{
 	private final KWiki kwiki;
 	
 	public static void main(String[] args) throws Exception  {		
+		File location = null;
+		if (args.length == 0) {
+			location = new File(".");
+		} else if (args.length == 1) {
+			location = new File(args[0]);
+		} else
+			throw new RuntimeException("unable to run KWiki");
+		
+		
+		
 		HttpServerProvider provider = HttpServerProvider.provider();
 		
 		int port = 8080;
@@ -38,7 +48,7 @@ public class KwikiServer implements HttpHandler{
 		ExecutorService executor = Executors.newFixedThreadPool(5);
 		server.setExecutor(executor);
 		
-		ResourceLocator locator = new SimpleFileSystemResourceLocator(new File("."));
+		ResourceLocator locator = new SimpleFileSystemResourceLocator(location);
 		KWiki kwiki = new KWiki(locator);
 		server.createContext("/", new KwikiServer(kwiki, executor));
 		server.start();
@@ -60,15 +70,11 @@ public class KwikiServer implements HttpHandler{
 		}
 		
 		String query = requestUri.getQuery();
-		System.out.println("query = ");
-		
 		if (query != null) {
 			if (query.equals("stop"))
 				executor.shutdown();
 				
 		}
-		
-		System.out.println("request path: " + requestUri.getPath());
 		
 		WikiResourceDescriptor resourceDescriptor = kwiki.getResource(requestUri.getPath().substring(1));
 		

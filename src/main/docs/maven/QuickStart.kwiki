@@ -1,3 +1,60 @@
-== Full Config ==
+== Command Line Config ==
 
-test page
+nK settings:  D:\apps\apache-maven-3.0.5\conf
+
+add the plugin group to settings.xml:
+also.. add the plugin repositories from below.
+
+<code>
+<pluginGroups><br/>
+&nbsp;&nbsp;<pluginGroup>koncept.kwiki</pluginGroup><br/>
+</pluginGroups><br/>
+</code>
+
+otherwise you will have to type
+<code>mvn koncept.kwiki:kwiki-maven-plugin:wait</code>
+instead of
+<code>mvn kwiki:wait</code>
+== Manual Run ==
+
+* <code>mvn kwiki:docs</code> will generate the precompiled user docs.
+* <code>mvn kwiki:wait</code> will run a live preview server on port 8080 
+* <code>mvn kwiki:run</code> is broken - its meant to be an async version of the above
+* <code>mvn kwiki:stop</code> will stop a running preview server
+** sending a query string of "stop" will also stop the server ([[http://localhost:8080/?stop|default]])
+
+== Project Integration ==
+
+add to your project definition:
+
+<code>
+
+<pluginRepositories><br/>
+&nbsp;&nbsp;<pluginRepository><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<id>custom-koncept.co.uk/local</id><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<name>repository.custom-koncept.co.uk-releases</name><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<url>http://repository.custom-koncept.co.uk/artifactory/public</url><br/>
+&nbsp;&nbsp;</pluginRepository><br/>
+</pluginRepositories><br/>
+
+
+<build><br/>
+&nbsp;&nbsp;<plugins><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<plugin><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<groupId>koncept.kwiki</groupId><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<artifactId>kwiki-maven-plugin</artifactId><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<version>1.0-SNAPSHOT</version><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<executions><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<execution><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<id>docs</id><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<goals><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<goal>jar</goal><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</goals><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</execution><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</executions><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;</plugin><br/>
+&nbsp;&nbsp;</plugins><br/>
+</build><br/>
+<code>
+
+now a *-userdocs.jar will be generated when you build

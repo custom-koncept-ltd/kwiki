@@ -2,10 +2,14 @@ package koncept.kwiki.mojo;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 public abstract class AbstractKwikiMojo extends AbstractMojo {
 
+	@Parameter(defaultValue="8080")
+	public int kwikiport;
+	
 	public String getDocsDir() {
 		String scriptDir = getMavenProject().getBuild().getScriptSourceDirectory();
 		String srcDir = getMavenProject().getBuild().getSourceDirectory();
@@ -34,5 +38,12 @@ public abstract class AbstractKwikiMojo extends AbstractMojo {
 		return (MavenProject)getPluginContext().get("project");
 	}
 
+	public int getPort() {
+		String value = System.getProperty("kwikiport");
+		if (value != null && !value.equals("")) {
+			return new Integer(value);
+		}
+		return kwikiport; //8080 default: because you won't have anything else on this port...  :/
+	}
 
 }

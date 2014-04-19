@@ -20,13 +20,6 @@ import com.sun.net.httpserver.spi.HttpServerProvider;
 
 @Mojo(name="wait", aggregator=true)
 public class WaitMojo extends AbstractKwikiMojo {
-/*
- add to settings.xml:
- 
-  <pluginGroups>
-    <pluginGroup>koncept.kwiki</pluginGroup>
-  </pluginGroups
- */
 	
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		try {
