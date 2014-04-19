@@ -5,6 +5,14 @@ import java.io.Writer;
 
 import org.sweble.wikitext.engine.Page;
 
+/**
+ * 
+ * A 'fixer' for version 1.0.0 of sweble... because its not pleasant to rely on snapshots.
+ * 
+ * @author nicholas.krul@gmail.com
+ *
+ */
+@Deprecated
 public class HtmlPrinter extends org.sweble.wikitext.engine.utils.HtmlPrinter {
 
 	String classPrefix= "";

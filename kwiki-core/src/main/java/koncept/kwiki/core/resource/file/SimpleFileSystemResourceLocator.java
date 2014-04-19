@@ -7,7 +7,7 @@ import koncept.kwiki.core.resource.ResourceLocator;
 
 public class SimpleFileSystemResourceLocator implements ResourceLocator {
 
-	public static final String DEFAULT_EXTENSION = ".kwiki"; //sweeble's is wikitext
+	public static final String DEFAULT_EXTENSION = ".kwiki"; //sweble's is wikitext
 	public static final String DEFAULT_DIRECTORY_FILE = "index";
 
 	private final File baseDirectory;

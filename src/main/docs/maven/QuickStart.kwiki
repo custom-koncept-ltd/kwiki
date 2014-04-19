@@ -1,6 +1,4 @@
-== Command Line Config ==
-
-nK settings:  D:\apps\apache-maven-3.0.5\conf
+== Command Line ==
 
 add the plugin group to settings.xml:
 also.. add the plugin repositories from below.
@@ -15,13 +13,14 @@ otherwise you will have to type
 <code>mvn koncept.kwiki:kwiki-maven-plugin:wait</code>
 instead of
 <code>mvn kwiki:wait</code>
+
 == Manual Run ==
 
 * <code>mvn kwiki:docs</code> will generate the precompiled user docs.
 * <code>mvn kwiki:wait</code> will run a live preview server on port 8080 
 * <code>mvn kwiki:run</code> is broken - its meant to be an async version of the above
 * <code>mvn kwiki:stop</code> will stop a running preview server
-** sending a query string of "stop" will also stop the server ([[http://localhost:8080/?stop|default]])
+** sending a query string of "stop" will also stop the server ([[http://localhost:8080/?stop|default location]])
 
 == Project Integration ==
 

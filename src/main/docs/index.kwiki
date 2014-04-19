@@ -1,14 +1,23 @@
-== Holding page ==
+== KWiki ==
 
+Documentation at its source...
 
-minor impl just to see if it works.
+<br/>
 
-* [[/maven/|why maven]]
-* [[/maven/Quickstart|quick start]]
-* [[/maven/SuggestedDocumentation|full config]]
+Modern Developers have a lot of tools at their disposal when it comes to documentation, 
+and the understanding and use of code.
 
-==== wiki ====
-* [[/wiki/Syntax|Syntax]]
+We have:
+* Source code and developer comments
+* Javadoc for API documentation
 
+and then I'm stuck editing some wiki or live-editable site for user documentation, 
+as though it has no relationship to the code.
 
-lets hope so
+Or... you could you KWiki.
+
+Plaintext wiki files that are trivial to check into source control, a simple way to view the resulting html, 
+and an easy way to package the docs in an artifact friendly manner.
+
+* Learn about the [[/maven|maven]] plugin
+* View the [[/wiki|wiki]] syntax
