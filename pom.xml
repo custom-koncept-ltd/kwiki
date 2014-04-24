@@ -59,4 +59,11 @@
 			<url>http://repository.custom-koncept.co.uk/artifactory/public</url>
 		</snapshotRepository>
 	</distributionManagement>
+	<scm>
+		<url>https://github.com/custom-koncept-ltd/kwiki.git</url>
+		<developerConnection>nicholas Krul</developerConnection>
+	</scm>
+	<issueManagement>
+		<url>https://github.com/custom-koncept-ltd/kwiki/issues</url>
+	</issueManagement>
 </project>

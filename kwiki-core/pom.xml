@@ -55,5 +55,12 @@
 		<sweble.version>1.1.1-SNAPSHOT</sweble.version>
 		<!-- <sweble.version>2.0.0-alpha-3-SNAPSHOT</sweble.version> -->
 	</properties>
+	<scm>
+		<url>https://github.com/custom-koncept-ltd/kwiki.git</url>
+		<developerConnection>nicholas Krul</developerConnection>
+	</scm>
+	<issueManagement>
+		<url>https://github.com/custom-koncept-ltd/kwiki/issues</url>
+	</issueManagement>
 </project>
 

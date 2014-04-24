@@ -101,5 +101,13 @@
 		<maven.project.api.version>2.2.1</maven.project.api.version>
 	</properties>
 	<name>Kwiki Maven Plugin</name>
+	<scm>
+		<url>https://github.com/custom-koncept-ltd/kwiki.git</url>
+		<developerConnection>nicholas Krul</developerConnection>
+	</scm>
+	<issueManagement>
+		<url>https://github.com/custom-koncept-ltd/kwiki/issues</url>
+	</issueManagement>
+	<description>Maven integration plugin, because your documentation and code should be released together</description>
 </project>
 
