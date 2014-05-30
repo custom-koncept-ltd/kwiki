@@ -12,7 +12,6 @@ import java.util.zip.ZipOutputStream;
 import koncept.kwiki.core.KWiki;
 import koncept.kwiki.core.WikiResource;
 import koncept.kwiki.core.WikiResourceDescriptor;
-import koncept.kwiki.core.document.WikiDocument;
 import koncept.kwiki.core.resource.ResourceLocator;
 import koncept.kwiki.core.resource.file.SimpleFileSystemResourceLocator;
 import koncept.kwiki.mojo.AbstractKwikiMojo;
@@ -112,25 +111,35 @@ public class DocsMojo extends AbstractKwikiMojo {
 				if (!(relativeDir.endsWith("/") || relativeDir.endsWith("\\")))
 					relativeDir = relativeDir + "/";
 			}
-			
-			if (file.getName().endsWith(".kwiki")) {
-				String pageName = file.getName().substring(0, file.getName().length() - 6); //6 =" .kwiki".length()
+			String type = getFileSuffix(file);
+			if(getKwiki().isConsumable(type)) {
+				String pageName = file.getName().substring(0, file.getName().length() - type.length());
+				WikiResourceDescriptor wikiResourceDescriptor = getKwiki().getResource(relativeDir + pageName);
+				WikiResource wikiResource = wikiResourceDescriptor.getCurrentVersion();
 				String html = null;
 				try {
-					WikiResourceDescriptor wikiResourceDescriptor = getKwiki().getResource(relativeDir + pageName);
-					WikiResource wikiResource = wikiResourceDescriptor.getCurrentVersion();
-					html = getKwiki().toHtml((WikiDocument)wikiResource);
+					html = getKwiki().toHtml(wikiResource);
 				} catch (Exception e) {
 					throw new MojoFailureException("Error converting wiki page", e);
 				}
-				out.putNextEntry(new ZipEntry(relativeDir + pageName + ".html"));
-				IOUtils.write(html, out);
-			} else {
+				
+				if (html != null) {
+					out.putNextEntry(new ZipEntry(relativeDir + pageName + ".html"));
+					IOUtils.write(html, out);
+				} 
+			} else { //NOT a consumable type for KWiki - include it as a binary fine
 				out.putNextEntry(new ZipEntry(relativeDir + file.getName()));
 				IOUtils.copy(new FileInputStream(file), out);
 			}
 		} else throw new MojoFailureException("Not a directory or a file?!?! : " + file.getAbsolutePath());
 	}
 	
+	private String getFileSuffix(File file) {
+		String docName = file.getName();
+		int dotIndex = docName.lastIndexOf(".");
+		if (dotIndex != -1)
+			return docName.substring(dotIndex + 1);
+		return "";
+	}
 
 }

@@ -6,7 +6,7 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>koncept.kwiki</groupId>
+		<groupId>com.kncept.kwiki</groupId>
 		<artifactId>kwiki-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
@@ -19,8 +19,14 @@
 		<dependency>
 			<groupId>org.sweble.wikitext</groupId>
 			<artifactId>swc-engine</artifactId>
-			<version>${sweble.version}</version>
+			<version>1.1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.commonjava.googlecode.markdown4j</groupId>
+			<artifactId>markdown4j</artifactId>
+			<version>2.2-cj-1.0</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -30,31 +36,6 @@
 		</dependency>
 	</dependencies>
 
-	<!-- sweble repo -->
-	<repositories>
-		<repository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</snapshots>
-			<id>osr-public-repositories</id>
-			<name>OSR Public Repositories</name>
-			<url>http://mojo.informatik.uni-erlangen.de/nexus/content/repositories/public</url>
-		</repository>
-	</repositories>
-
-
-	<properties>
-		<!-- <sweble.version>1.0.0</sweble.version> -->
-		<sweble.version>1.1.1-SNAPSHOT</sweble.version>
-		<!-- <sweble.version>2.0.0-alpha-3-SNAPSHOT</sweble.version> -->
-	</properties>
 	<scm>
 		<url>https://github.com/custom-koncept-ltd/kwiki.git</url>
 		<developerConnection>nicholas Krul</developerConnection>

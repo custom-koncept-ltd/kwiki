@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- The Basics -->
-	<groupId>koncept.kwiki</groupId>
+	<groupId>com.kncept.kwiki</groupId>
 	<artifactId>kwiki-parent</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -49,14 +49,14 @@
 
 	<distributionManagement>
 		<repository>
-			<id>repository.custom-koncept.co.uk</id>
-			<name>repository.custom-koncept.co.uk-releases</name>
-			<url>http://repository.custom-koncept.co.uk/artifactory/public</url>
+			<id>repository.custom-koncept.com</id>
+			<name>repository.custom-koncept.com-releases</name>
+			<url>http://repository.custom-koncept.com/artifactory/public</url>
 		</repository>
 		<snapshotRepository>
-			<id>repository.custom-koncept.co.uk</id>
-			<name>repository.custom-koncept.co.uk-snapshots</name>
-			<url>http://repository.custom-koncept.co.uk/artifactory/public</url>
+			<id>repository.custom-koncept.com</id>
+			<name>repository.custom-koncept.com-snapshots</name>
+			<url>http://repository.custom-koncept.com/artifactory/public</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<scm>

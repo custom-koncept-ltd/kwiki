@@ -2,7 +2,6 @@ package koncept.kwiki.http;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.concurrent.ExecutorService;
@@ -11,8 +10,6 @@ import java.util.concurrent.Executors;
 import koncept.kwiki.core.KWiki;
 import koncept.kwiki.core.WikiResource;
 import koncept.kwiki.core.WikiResourceDescriptor;
-import koncept.kwiki.core.document.BinaryResource;
-import koncept.kwiki.core.document.WikiDocument;
 import koncept.kwiki.core.resource.ResourceLocator;
 import koncept.kwiki.core.resource.file.SimpleFileSystemResourceLocator;
 
@@ -85,20 +82,20 @@ public class KwikiServer implements HttpHandler{
 			exchange.getResponseBody().write(b);
 		} else {
 			WikiResource resource = resourceDescriptor.getCurrentVersion();
-			if (resource instanceof BinaryResource) {
-				InputStream in = ((BinaryResource)resource).getBytes();
-				IOUtils.copy(in, exchange.getResponseBody());
-			} else if (resource instanceof WikiDocument) {
-				byte[] b;
-				try {
-				String html = kwiki.toHtml((WikiDocument)resource);
-				b = html.getBytes();
+			String html = null;
+			try {
+				html = kwiki.toHtml(resource);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			if (html != null) {
+				byte[] b = html.getBytes();
 				exchange.sendResponseHeaders(200, b.length);
-				} catch (Exception e) {
-					b = e.getMessage().getBytes();
-					exchange.sendResponseHeaders(500, b.length);
-				} finally{}
 				exchange.getResponseBody().write(b);
+			} else {
+				exchange.sendResponseHeaders(200, -1); //unknown length
+				IOUtils.copy(resource.getStream(), exchange.getResponseBody());
 			}
 		}
 		exchange.close();
