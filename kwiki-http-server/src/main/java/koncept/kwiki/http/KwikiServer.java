@@ -49,7 +49,7 @@ public class KwikiServer implements HttpHandler{
 		KWiki kwiki = new KWiki(locator);
 		server.createContext("/", new KwikiServer(kwiki, executor));
 		server.start();
-		System.out.println("Started KWiki on port " + port);
+		System.out.println("Started KWiki on port " + port + " serving " + location.getAbsolutePath());
 	}
 	
 	public KwikiServer(KWiki kwiki, ExecutorService executor) {

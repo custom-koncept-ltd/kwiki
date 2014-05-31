@@ -1,5 +1,6 @@
 package koncept.kwiki.core.markup;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +23,12 @@ public class MarkdownCompiler implements MarkupCompiler {
 	}
 
 	public String toHtml(WikiResource resource) throws Exception {
-		return processor.process(resource.getStream());
+		InputStream is = resource.getStream();
+		try {
+			return processor.process(is);
+		} finally {
+			is.close();
+		}
 	}
 
 }

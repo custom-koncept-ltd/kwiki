@@ -1,16 +1,6 @@
 KWiki has a maven plugin designed to do all of the heavy lifting for you.
 
-All that you need to do is to follow the [[/maven/Quickstart|Quickstart]] guide, and deploy your documentation somewhere.
+All that you need to do is to follow the [[QuickStart|Quickstart]] guide, and deploy your documentation somewhere.
 
 Or, if you are being a little more thorough with your documentation, 
-you could apply all of the [[/maven/SuggestedDocumentation|SuggestedDocumentation]].
-
-== Plugin Configuration ==
-
-classifier
-:Default <code>userdocs</code>
-:Artifact suffix for attached html.
-
-kwikiport
-:Default <code>8080</code>
-:The port that the KWiki Server operates on, for previewing and live editing content.
+you could apply all of the [[SuggestedDocumentation|Suggested Documentation]].

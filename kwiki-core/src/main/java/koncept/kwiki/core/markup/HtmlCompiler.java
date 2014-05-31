@@ -1,5 +1,6 @@
 package koncept.kwiki.core.markup;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import koncept.kwiki.core.util.InputStreamToString;
  * @author koncept
  *
  */
-public class HtmlMarkupCompiler implements MarkupCompiler {
+public class HtmlCompiler implements MarkupCompiler {
 
 	public static final List<String> FILE_EXTENSIONS =  Arrays.asList("htm", "html");
 	
@@ -24,7 +25,12 @@ public class HtmlMarkupCompiler implements MarkupCompiler {
 	}
 
 	public String toHtml(WikiResource resource) throws Exception {
-		return InputStreamToString.convertStreamToString(resource.getStream());
+		InputStream is = resource.getStream();
+		try {
+			return InputStreamToString.convertStreamToString(resource.getStream());
+		} finally {
+			is.close();
+		}
 	}
 
 }

@@ -1,9 +1,0 @@
-== KWiki Syntax ==
-
-Basically uses [[http://www.mediawiki.org/wiki/Help:Formatting|MediaWiki]] syntax
-
-== Differerences ==
-
-&lt;pre&gt; is not formatted
-
-Definition Lists don't work correctly

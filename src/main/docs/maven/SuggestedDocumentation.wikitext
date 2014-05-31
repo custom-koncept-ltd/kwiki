@@ -1,7 +1,0 @@
-== Full Config ==
-
-In addition to installing the KWiki plugin, We would reccomend the following plugins are also installed:
-
-== Javadoc Plugin ==
-
-== Source Plugin ==

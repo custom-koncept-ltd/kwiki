@@ -1,0 +1,3 @@
+== MediaWiki Syntax ==
+Uses the [[http://sweble.org/|Sweble]] library to format the code.
+Based on the [[http://www.mediawiki.org/wiki/Help:Formatting|MediaWiki]] syntax.
