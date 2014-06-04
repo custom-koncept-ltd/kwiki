@@ -3,26 +3,18 @@ package koncept.kwiki.http;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.URI;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import koncept.kwiki.core.KWiki;
-import koncept.kwiki.core.WikiResource;
-import koncept.kwiki.core.WikiResourceDescriptor;
-import koncept.kwiki.core.resource.ResourceLocator;
 import koncept.kwiki.core.resource.file.SimpleFileSystemResourceLocator;
 
-import org.apache.commons.io.IOUtils;
-
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.spi.HttpServerProvider;
 
-public class KwikiServer implements HttpHandler{
+public class KwikiServer {
 
-	private final ExecutorService executor;
+	private final HttpServer server;
 	private final KWiki kwiki;
 	
 	public static void main(String[] args) throws Exception  {		
@@ -33,71 +25,62 @@ public class KwikiServer implements HttpHandler{
 			location = new File(args[0]);
 		} else
 			throw new RuntimeException("unable to run KWiki");
-		
-		
-		
-		HttpServerProvider provider = HttpServerProvider.provider();
-		
 		int port = 8080;
-		
-		HttpServer server = provider.createHttpServer(new InetSocketAddress("localhost", port), 0);
-		
-		ExecutorService executor = Executors.newFixedThreadPool(5);
-		server.setExecutor(executor);
-		
-		ResourceLocator locator = new SimpleFileSystemResourceLocator(location);
-		KWiki kwiki = new KWiki(locator);
-		server.createContext("/", new KwikiServer(kwiki, executor));
+		KwikiServer server = new KwikiServer(location, port);
 		server.start();
 		System.out.println("Started KWiki on port " + port + " serving " + location.getAbsolutePath());
 	}
 	
-	public KwikiServer(KWiki kwiki, ExecutorService executor) {
+	private static KWiki fileSystemKwiki(File location) throws Exception {
+		return new KWiki(new SimpleFileSystemResourceLocator(location));
+	}
+	
+	private static HttpServer server(int port) throws IOException {
+		HttpServerProvider provider = HttpServerProvider.provider();
+		HttpServer server = provider.createHttpServer(new InetSocketAddress("localhost", port), 0);
+		return server;
+	}
+	
+	public KwikiServer(File rootDir, int port) throws Exception {
+		this(fileSystemKwiki(rootDir), port);
+	}
+	
+	public KwikiServer(KWiki kwiki, int port) throws Exception {
+		this(kwiki, server(port));
+	}
+	
+	public KwikiServer(File rootDir, HttpServer server) throws Exception {
+		this(fileSystemKwiki(rootDir), server);
+	}
+
+	public KwikiServer(KWiki kwiki, HttpServer server) {
+		this.server = server;
 		this.kwiki = kwiki;
-		this.executor = executor;
-	}
-	
-	
-	public void handle(HttpExchange exchange) throws IOException {
-		URI requestUri = exchange.getRequestURI();
-		
-		if (requestUri.getPath().equals("/favicon.ico")) {
-			exchange.sendResponseHeaders(404, 0);
-			exchange.close();
-		}
-		
-		String query = requestUri.getQuery();
-		if (query != null) {
-			if (query.equals("stop"))
-				executor.shutdown();
-				
-		}
-		
-		WikiResourceDescriptor resourceDescriptor = kwiki.getResource(requestUri.getPath().substring(1));
-		
-		if (resourceDescriptor == null) {
-			String notFound = "404: Not Found";
-			byte[] b = notFound.getBytes();
-			exchange.sendResponseHeaders(404, b.length);
-			exchange.getResponseBody().write(b);
+		ExecutorService executorService = null;
+		if (server.getExecutor() == null) {
+			executorService = Executors.newFixedThreadPool(5);
+			server.setExecutor(executorService);
+		} else if (server.getExecutor() instanceof ExecutorService) {
+			executorService = (ExecutorService)server.getExecutor();
 		} else {
-			WikiResource resource = resourceDescriptor.getCurrentVersion();
-			String html = null;
-			try {
-				html = kwiki.toHtml(resource);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			if (html != null) {
-				byte[] b = html.getBytes();
-				exchange.sendResponseHeaders(200, b.length);
-				exchange.getResponseBody().write(b);
-			} else {
-				exchange.sendResponseHeaders(200, -1); //unknown length
-				IOUtils.copy(resource.getStream(), exchange.getResponseBody());
-			}
+			//can't set executor... so the ?stop scommand won't work
+			throw new RuntimeException("won't start something I can't stop");
 		}
-		exchange.close();
+
+		server.createContext("/", new KwikiResourceHandler(this));
 	}
+	
+	public KWiki getKwiki() {
+		return kwiki;
+	}
+	
+	public void start() {
+		server.start();
+	}
+	
+	public void stop() {
+		server.stop(0);
+	}
+	
+	
 }

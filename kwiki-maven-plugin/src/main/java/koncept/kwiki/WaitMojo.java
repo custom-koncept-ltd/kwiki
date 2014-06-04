@@ -5,9 +5,6 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import koncept.kwiki.core.KWiki;
-import koncept.kwiki.core.resource.ResourceLocator;
-import koncept.kwiki.core.resource.file.SimpleFileSystemResourceLocator;
 import koncept.kwiki.http.KwikiServer;
 import koncept.kwiki.mojo.AbstractKwikiMojo;
 
@@ -29,11 +26,7 @@ public class WaitMojo extends AbstractKwikiMojo {
 			
 			ExecutorService executor = Executors.newFixedThreadPool(5);
 			server.setExecutor(executor);
-			
-			ResourceLocator locator = new SimpleFileSystemResourceLocator(new File(getDocsDir()));
-			KWiki kwiki = new KWiki(locator);
-			server.createContext("/", new KwikiServer(kwiki, executor));
-			server.start();
+			new KwikiServer(new File(getDocsDir()), server).start();
 			getLog().info("Started KWiki on port " + getPort());
 			
 			while (!(executor.isShutdown() || executor.isTerminated())) {
@@ -44,14 +37,6 @@ public class WaitMojo extends AbstractKwikiMojo {
 		} catch (Exception e) {
 			throw new MojoExecutionException("Unable to start KWiki", e);
 		}
-	}
-	
-	public int getPort() {
-		String value = System.getProperty("kwikiport");
-		if (value != null && !value.equals("")) {
-			return new Integer(value);
-		}
-		return 8080; //because you won't have anything else on this port...  :/
 	}
 	
 }
