@@ -7,8 +7,9 @@ import koncept.kwiki.core.document.DocumentVersion;
 
 public interface WikiResourceDescriptor {
 
-	public List<DocumentVersion> getVersions(); //includes current version
+	List<DocumentVersion> previousVersions();
+	DocumentVersion currentVersion();
 	
-	public WikiResource getCurrentVersion();
-	public WikiResource getVersion(DocumentVersion version);
+	WikiResource get(DocumentVersion version);
+
 }

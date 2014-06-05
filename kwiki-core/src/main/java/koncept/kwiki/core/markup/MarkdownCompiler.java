@@ -18,16 +18,18 @@ public class MarkdownCompiler implements MarkupCompiler {
 		processor = new Markdown4jProcessor();
 	}
 	
-	public boolean accepts(String type) {
-		return FILE_EXTENSIONS.contains(type);
+	public List<String> fileTypes() {
+		return FILE_EXTENSIONS;
 	}
 
 	public String toHtml(WikiResource resource) throws Exception {
-		InputStream is = resource.getStream();
+		InputStream is = null;
 		try {
+			is = resource.open();
 			return processor.process(is);
 		} finally {
-			is.close();
+			if (is != null)
+				is.close();
 		}
 	}
 

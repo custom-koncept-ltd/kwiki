@@ -1,7 +1,6 @@
 package koncept.kwiki.core.resource.file;
 
-import java.io.File;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import koncept.kwiki.core.WikiResource;
@@ -10,35 +9,33 @@ import koncept.kwiki.core.document.DocumentVersion;
 
 public class SimpleFileSystemResourceDescriptor implements WikiResourceDescriptor {
 	
-	private final File document;
+	private final SimpleFileSystemResourceLocator resourceLocator;
+	private final WikiResource currentVersion;
 	
-	public SimpleFileSystemResourceDescriptor(File document) {
-		this.document = document;
-	}
-
-	public List<DocumentVersion> getVersions() {
-		return Arrays.asList(new DocumentVersion(getDocumentName(), 0));
+	public SimpleFileSystemResourceDescriptor(SimpleFileSystemResourceLocator resourceLocator, WikiResource currentVersion) {
+		this.resourceLocator = resourceLocator;
+		this.currentVersion = currentVersion;
 	}
 	
-	public WikiResource getCurrentVersion() {
-		return new SimpleFileSystemWikiResource(document, new DocumentVersion(getDocumentName(), 0), this);
+	@Override
+	public List<DocumentVersion> previousVersions() {
+		return Collections.emptyList();
 	}
 	
-	private String getDocumentName() {
-		String docName = document.getName();
-		int dotIndex = docName.lastIndexOf(".");
-		if (dotIndex != -1)
-			return docName.substring(0, dotIndex);
-		return docName;
+	@Override
+	public DocumentVersion currentVersion() {
+		//TODO: use the last / bits
+		return new DocumentVersion(currentVersion.getName(), 0);
 	}
 	
-	public WikiResource getVersion(DocumentVersion version) {
-		if (version.getDocumentVersion() == 0) {
-			return getCurrentVersion();
-		}
-		throw new RuntimeException("No version to fetch");
+	@Override
+	public WikiResource get(DocumentVersion version) {
+		return currentVersion;
 	}
 	
+	protected SimpleFileSystemResourceLocator getResourceLocator() {
+		return resourceLocator;
+	}
 	
 
 }

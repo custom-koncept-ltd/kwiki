@@ -8,17 +8,12 @@ import koncept.kwiki.core.WikiResource;
 import koncept.kwiki.core.util.InputStreamToString;
 
 /**
- * converts HTML to HTML.</br>
- * <br/>
- * <br/>
- * ... just streams the source file.<br/>
- * Allows the use (or importing) or html resources to be used natively
+ * converts text to html by wrapping it in a 'pre' tag
  * @author nicholas.krul@gmail.com
- *
  */
-public class HtmlCompiler implements MarkupCompiler {
+public class PlaintextCompiler implements MarkupCompiler {
 
-	public static final List<String> FILE_EXTENSIONS =  Arrays.asList("htm", "html");
+	public static final List<String> FILE_EXTENSIONS =  Arrays.asList("txt", "text");
 	
 	public List<String> fileTypes() {
 		return FILE_EXTENSIONS;
@@ -28,11 +23,19 @@ public class HtmlCompiler implements MarkupCompiler {
 		InputStream is = null;
 		try {
 			is = resource.open();
-			return InputStreamToString.convertStreamToString(is);
+			return "<pre>" + 
+					ensureNonClosingHtml(
+							InputStreamToString.convertStreamToString(
+									is))
+					+ "</pre>";
 		} finally {
 			if (is != null)
 				is.close();
 		}
+	}
+	
+	private String ensureNonClosingHtml(String in) {
+		return in;
 	}
 
 }

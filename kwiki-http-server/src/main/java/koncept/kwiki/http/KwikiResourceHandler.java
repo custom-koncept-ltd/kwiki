@@ -1,11 +1,11 @@
 package koncept.kwiki.http;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
 import koncept.kwiki.core.KWiki;
 import koncept.kwiki.core.WikiResource;
-import koncept.kwiki.core.WikiResourceDescriptor;
 
 import org.apache.commons.io.IOUtils;
 
@@ -40,15 +40,15 @@ public class KwikiResourceHandler implements HttpHandler {
 				
 		}
 		
-		WikiResourceDescriptor resourceDescriptor = kwiki.getResource(requestUri.getPath().substring(1));
+		WikiResource resource = kwiki.getResource(requestUri.getPath());
 		
-		if (resourceDescriptor == null) {
+		
+		if (resource == null) {
 			String notFound = "404: Not Found";
 			byte[] b = notFound.getBytes();
 			exchange.sendResponseHeaders(404, b.length);
 			exchange.getResponseBody().write(b);
 		} else {
-			WikiResource resource = resourceDescriptor.getCurrentVersion();
 			String html = null;
 			try {
 				html = kwiki.toHtml(resource);
@@ -61,8 +61,16 @@ public class KwikiResourceHandler implements HttpHandler {
 				exchange.sendResponseHeaders(200, b.length);
 				exchange.getResponseBody().write(b);
 			} else {
+				InputStream is = null;
 				exchange.sendResponseHeaders(200, -1); //unknown length
-				IOUtils.copy(resource.getStream(), exchange.getResponseBody());
+				try {
+					is = resource.open();
+					IOUtils.copy(is, exchange.getResponseBody());
+				} finally {
+					if (is != null)
+						is.close();
+				}
+				
 			}
 		}
 		exchange.close();

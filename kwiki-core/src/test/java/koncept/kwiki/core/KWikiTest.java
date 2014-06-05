@@ -26,24 +26,24 @@ public class KWikiTest {
 	
 	@Test
 	public void noResourceTest() {
-		WikiResourceDescriptor resource = kwiki.getResource("missing");
+		WikiResource resource = kwiki.getResource("missing");
 		assertNull(resource);
 	}
 	
 	@Test
 	public void canFindCoreResource() throws Exception {
-		WikiResourceDescriptor resource = kwiki.getResource("KwikiRoot");
+		WikiResource resource = kwiki.getResource("KwikiRoot");
 		assertNotNull(resource);
-		String html = kwiki.toHtml(resource.getCurrentVersion());
+		String html = kwiki.toHtml(resource);
 //		System.out.println(html);
 		Assert.assertNotNull(html);
 	}
 	
 	@Test
 	public void findMarkdownResource() throws Exception {
-		WikiResourceDescriptor resource = kwiki.getResource("md/syntax");
+		WikiResource resource = kwiki.getResource("md/syntax");
 		assertNotNull(resource);
-		String html = kwiki.toHtml(resource.getCurrentVersion());
+		String html = kwiki.toHtml(resource);
 //		System.out.println(html);
 		Assert.assertNotNull(html);
 	}

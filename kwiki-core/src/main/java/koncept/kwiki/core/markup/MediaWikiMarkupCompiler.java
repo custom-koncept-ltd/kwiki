@@ -2,6 +2,8 @@ package koncept.kwiki.core.markup;
 
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.List;
 
 import koncept.kwiki.core.WikiResource;
 import koncept.kwiki.core.util.InputStreamToString;
@@ -26,15 +28,16 @@ public class MediaWikiMarkupCompiler implements MarkupCompiler {
 		compiler = new Compiler(config);
 	}
 	
-	public boolean accepts(String type) {
-		return FILE_EXTENSION.equals(type);
+	public List<String> fileTypes() {
+		return Arrays.asList(FILE_EXTENSION);
 	}
 
 	public String toHtml(WikiResource resource) throws Exception {
-		PageTitle pageTitle = PageTitle.make(config, resource.getDocumentVersion().getDocumentName());
-		PageId pageId = new PageId(pageTitle, resource.getDocumentVersion().getDocumentVersion());
-		InputStream is = resource.getStream();
+		PageTitle pageTitle = PageTitle.make(config, resource.metadata().currentVersion().getDocumentName());
+		PageId pageId = new PageId(pageTitle, resource.metadata().currentVersion().getDocumentVersion());
+		InputStream is = null;
 		try {
+			is = resource.open();
 			String wikitext = InputStreamToString.convertStreamToString(is);
 			CompiledPage cp = compiler.postprocess(pageId, wikitext, null);
 			
@@ -47,7 +50,8 @@ public class MediaWikiMarkupCompiler implements MarkupCompiler {
 	
 			return w.toString();
 		} finally {
-			is.close();
+			if (is != null)
+				is.close();
 		}
 	}
 

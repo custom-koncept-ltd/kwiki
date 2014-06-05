@@ -13,7 +13,7 @@ public class PageWrapper {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("<html><head><title>");
-		sb.append(page.getDocumentVersion().getDocumentName());
+		sb.append(page.metadata().currentVersion().getDocumentName());
 		sb.append("</title></head><body>");
 		
 		sb.append(html);

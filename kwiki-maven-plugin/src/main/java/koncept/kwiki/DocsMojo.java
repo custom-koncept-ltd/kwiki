@@ -11,7 +11,6 @@ import java.util.zip.ZipOutputStream;
 
 import koncept.kwiki.core.KWiki;
 import koncept.kwiki.core.WikiResource;
-import koncept.kwiki.core.WikiResourceDescriptor;
 import koncept.kwiki.core.resource.ResourceLocator;
 import koncept.kwiki.core.resource.file.SimpleFileSystemResourceLocator;
 import koncept.kwiki.mojo.AbstractKwikiMojo;
@@ -114,8 +113,8 @@ public class DocsMojo extends AbstractKwikiMojo {
 			String type = getFileSuffix(file);
 			if(getKwiki().isConsumable(type)) {
 				String pageName = file.getName().substring(0, file.getName().length() - type.length());
-				WikiResourceDescriptor wikiResourceDescriptor = getKwiki().getResource(relativeDir + pageName);
-				WikiResource wikiResource = wikiResourceDescriptor.getCurrentVersion();
+				WikiResource wikiResource = getKwiki().getResource(relativeDir + pageName);
+//				WikiResource wikiResource = wikiResourceDescriptor.getCurrentVersion();
 				String html = null;
 				try {
 					html = getKwiki().toHtml(wikiResource);
