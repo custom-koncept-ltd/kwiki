@@ -26,13 +26,13 @@ public class KWikiTest {
 	
 	@Test
 	public void noResourceTest() {
-		WikiResource resource = kwiki.getResource("missing");
+		WikiResource resource = kwiki.getResource("/missing");
 		assertNull(resource);
 	}
 	
 	@Test
 	public void canFindCoreResource() throws Exception {
-		WikiResource resource = kwiki.getResource("KwikiRoot");
+		WikiResource resource = kwiki.getResource("/KwikiRoot");
 		assertNotNull(resource);
 		String html = kwiki.toHtml(resource);
 //		System.out.println(html);
@@ -41,7 +41,7 @@ public class KWikiTest {
 	
 	@Test
 	public void findMarkdownResource() throws Exception {
-		WikiResource resource = kwiki.getResource("md/syntax");
+		WikiResource resource = kwiki.getResource("/md/syntax");
 		assertNotNull(resource);
 		String html = kwiki.toHtml(resource);
 //		System.out.println(html);
