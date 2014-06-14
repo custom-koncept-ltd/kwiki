@@ -1,8 +1,11 @@
 package koncept.kwiki.core;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import koncept.kwiki.core.html.BasicPageWrapper;
+import koncept.kwiki.core.html.FullLeftbarMenu;
 import koncept.kwiki.core.html.PageWrapper;
 import koncept.kwiki.core.markup.HtmlCompiler;
 import koncept.kwiki.core.markup.MarkdownCompiler;
@@ -10,6 +13,7 @@ import koncept.kwiki.core.markup.MarkupCompiler;
 import koncept.kwiki.core.markup.MediaWikiMarkupCompiler;
 import koncept.kwiki.core.markup.PlaintextCompiler;
 import koncept.kwiki.core.resource.ResourceLocator;
+import koncept.kwiki.core.util.WikiNameUtils;
 
 public class KWiki {
 	public static final String DEFAULT_DIRECTORY_FILE = "index";
@@ -25,14 +29,15 @@ public class KWiki {
 		producers.add(new MediaWikiMarkupCompiler());
 		producers.add(new HtmlCompiler());
 		producers.add(new PlaintextCompiler());
-		pageWrapper = new PageWrapper();
+//		pageWrapper = new BasicPageWrapper();
+		pageWrapper = new FullLeftbarMenu();
 	}
 	
 	public WikiResource getResource(String resourceName) {
 		if (!resourceName.startsWith("/")) throw new IllegalArgumentException("Invalid resource: " + resourceName);
 		
 		if (resourceName.endsWith("/")) {
-			resourceName = resourceName + resourceLocator.getResource(resourceName + directoryDefault); 
+			resourceName = resourceName + directoryDefault;
 		}
 		
 		WikiResource resource = null;
@@ -63,22 +68,12 @@ public class KWiki {
 	
 	public String toHtml(WikiResource resource) throws Exception {
 		String html = null;
-		MarkupCompiler compiler = getMarkupCompiler(getType(resource));
+		MarkupCompiler compiler = getMarkupCompiler(WikiNameUtils.getExtension(resource.getName()).toLowerCase());
 		if (compiler != null) html = compiler.toHtml(resource);
-		if (html != null) html = pageWrapper.wrap(html, resource);
+		if (html != null) html = pageWrapper.wrap(this, html, resource);
 		return html;
 	}
-	
-	//TODO: move this somewhere appropriate
-	private String getType(WikiResource resource) {
-		String name = resource.getName();
-		int dotIndex = name.lastIndexOf(".");
-		if (dotIndex == -1) return "";
-		return name.substring(dotIndex + 1).toLowerCase();
-	}
-	
-	//TODO: remove this and use a better method for tracking wiki-ability of input files
-	@Deprecated
+
 	public boolean isConsumable(String type) {
 		return getMarkupCompiler(type) != null;
 	}
@@ -93,6 +88,18 @@ public class KWiki {
 	
 	public String getDirectoryDefault() {
 		return directoryDefault;
+	}
+	
+	public PageWrapper getPageWrapper() {
+		return pageWrapper;
+	}
+	
+	public void setPageWrapper(PageWrapper pageWrapper) {
+		this.pageWrapper = pageWrapper;
+	}
+	
+	public List<KWikiListing> getListing() throws IOException {
+		return KWikiListing.createListing(this, resourceLocator.rootListing());
 	}
 	
 }

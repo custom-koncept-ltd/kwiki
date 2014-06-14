@@ -15,6 +15,7 @@ public interface WikiResource {
 	
 	/**
 	 * The full path to this resource (starting with a slash)
+	 * NOTE: this MUST only contain forward slashes
 	 * @return
 	 */
 	public String getName();

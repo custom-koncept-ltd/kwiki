@@ -1,27 +1,11 @@
 package koncept.kwiki.core.html;
 
+import java.io.IOException;
+
+import koncept.kwiki.core.KWiki;
 import koncept.kwiki.core.WikiResource;
 
-/**
- * Provides *basic* page wrapping functionality... <br/>
- * @author koncept
- *
- */
-public class PageWrapper {
+public interface PageWrapper {
 
-	public String wrap(String html, WikiResource page) {
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("<html><head><title>");
-		sb.append(page.metadata().currentVersion().getDocumentName());
-		sb.append("</title></head><body>");
-		
-		sb.append(html);
-		
-		sb.append("</body>");
-		
-		return sb.toString();
-		
-	}
-	
+	public String wrap(KWiki kwiki, String html, WikiResource page) throws IOException;
 }

@@ -32,16 +32,8 @@ public class KwikiResourceHandler implements HttpHandler {
 			exchange.close();
 		}
 		
-		//TODO: need an 'admin control' section
-		String query = requestUri.getQuery();
-		if (query != null) {
-			if (query.equals("stop"))
-				server.stop();
-				
-		}
 		
 		WikiResource resource = kwiki.getResource(requestUri.getPath());
-		
 		
 		if (resource == null) {
 			String notFound = "404: Not Found";
@@ -73,6 +65,17 @@ public class KwikiResourceHandler implements HttpHandler {
 				
 			}
 		}
+		
+		
+		//TODO: need an 'admin control' section
+		String query = requestUri.getQuery();
+		if (query != null) {
+			if (query.equals("stop"))
+				server.stop();
+				
+		}
+		
+		
 		exchange.close();
 	}
 }

@@ -37,7 +37,7 @@ public class SimpleFileSystemResource implements WikiResource {
 	
 	@Override
 	public String getName() {
-		return "/" + file.getAbsolutePath().substring(rootDirectory.getAbsolutePath().length());
+		return file.getAbsolutePath().substring(rootDirectory.getAbsolutePath().length()).replaceAll("\\\\", "/");
 	}
 
 	@Override
