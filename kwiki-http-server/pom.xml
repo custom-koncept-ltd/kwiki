@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>com.kncept.httpserver</groupId>
 			<artifactId>koncept-full</artifactId>
-			<version>0.8.0</version>
+			<version>0.9.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.kncept.kwiki</groupId>
@@ -47,7 +47,9 @@
 									<exclude>jmock:*</exclude>
 									<exclude>*:xml-apis</exclude>
 									<exclude>org.apache.maven:lib:tests</exclude>
-									<exclude>log4j:log4j:jar:</exclude>
+									<!-- 
+									<exclude>log4j:log4j</exclude>
+									 -->
 								</excludes>
 							</artifactSet>
 						</configuration>
@@ -63,7 +65,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>KwikiServer</mainClass>
+							<mainClass>koncept.kwiki.http.KwikiServer</mainClass>
 							<packageName>koncept.kwiki.http</packageName>
 						</manifest>
 					</archive>

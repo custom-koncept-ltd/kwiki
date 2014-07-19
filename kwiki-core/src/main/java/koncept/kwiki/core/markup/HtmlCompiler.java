@@ -7,6 +7,9 @@ import java.util.List;
 import koncept.kwiki.core.WikiResource;
 import koncept.kwiki.core.util.InputStreamToString;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 /**
  * converts HTML to HTML.</br>
  * <br/>
@@ -25,6 +28,12 @@ public class HtmlCompiler implements MarkupCompiler {
 	}
 
 	public String toHtml(WikiResource resource) throws Exception {
+		String html = readString(resource);
+		Document htmlDoc = Jsoup.parse(html);
+		return htmlDoc.body().html();
+	}
+	
+	public String readString(WikiResource resource) throws Exception {
 		InputStream is = null;
 		try {
 			is = resource.open();
