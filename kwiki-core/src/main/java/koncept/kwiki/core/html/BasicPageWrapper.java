@@ -1,5 +1,7 @@
 package koncept.kwiki.core.html;
 
+import java.io.InputStream;
+
 import koncept.kwiki.core.KWiki;
 import koncept.kwiki.core.WikiResource;
 
@@ -23,6 +25,11 @@ public class BasicPageWrapper implements PageWrapper {
 		
 		return sb.toString();
 		
+	}
+	
+	@Override
+	public InputStream css() {
+		return null;
 	}
 	
 }

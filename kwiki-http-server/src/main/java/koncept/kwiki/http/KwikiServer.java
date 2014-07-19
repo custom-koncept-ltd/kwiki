@@ -28,7 +28,7 @@ public class KwikiServer {
 		int port = 8080;
 		KwikiServer server = new KwikiServer(location, port);
 		server.start();
-		System.out.println("Started KWiki on port " + port + " serving " + location.getAbsolutePath());
+		System.out.println("Started KWiki on port " + port + " using " + server.server.getClass() + " serving " + location.getAbsolutePath());
 	}
 	
 	private static KWiki fileSystemKwiki(File location) throws Exception {
@@ -36,7 +36,8 @@ public class KwikiServer {
 	}
 	
 	private static HttpServer server(int port) throws IOException {
-		HttpServerProvider provider = HttpServerProvider.provider();
+//		HttpServerProvider provider = HttpServerProvider.provider();
+		HttpServerProvider provider = new sun.net.httpserver.DefaultHttpServerProvider();
 		HttpServer server = provider.createHttpServer(new InetSocketAddress("localhost", port), 0);
 		return server;
 	}
